@@ -7,6 +7,7 @@ const helmet = require("helmet");
 const Template = require("./../template");
 const connectDB = require("./../database/connect.js");
 const userRoutes = require("./../routes/userRoutes");
+const authRoutes = require("./../routes/authRoutes.js");
 const app = express();
 
 app.use(bodyParser.json());
@@ -18,6 +19,7 @@ app.use(cors());
 connectDB();
 
 app.use("/", userRoutes);
+app.use("/", authRoutes);
 
 app.use((err, req, res, next) => {
   if (err.name === 'UnauthorizedError') {

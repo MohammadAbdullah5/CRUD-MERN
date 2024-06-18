@@ -29,53 +29,58 @@ const list = async (req, res) => {
 
 const userByID = async (req, res, next, id) => {
   try {
-    let user = await User.findById(id)
+    let user = await User.findById(id);
     if (!user)
-    return res.status('400').json({
-    error: "User not found"
-    })
-    req.profile = user
-    next()
-    } catch (err) {
-    return res.status('400').json({
-    error: "Could not retrieve user"
-    })
-    }
-   
+      return res.status(400).json({
+        error: "User not found",
+      });
+    req.profile = user;
+    next();
+  } catch (err) {
+    return res.status(400).json({
+      error: "Could not retrieve user",
+    });
+  }
 };
 const read = (req, res) => {
-  req.profile.hashed_password = undefined
- req.profile.salt = undefined
- return res.json(req.profile)
+  req.profile.hashed_password = undefined;
+  req.profile.salt = undefined;
+  return res.json(req.profile);
 };
 const update = async (req, res) => {
   try {
-    let user = req.profile
-    user = extend(user, req.body)
-    user.updated = Date.now()
-    await user.save()
-    user.hashed_password = undefined
-    user.salt = undefined
-    res.json(user)
-    } catch (err) {
+    let user = req.profile;
+    user = extend(user, req.body);
+    user.updated = Date.now();
+    await user.save();
+    user.hashed_password = undefined;
+    user.salt = undefined;
+    res.json(user);
+  } catch (err) {
     return res.status(400).json({
-    error: getErrorMessage(err)
-    })
-    }
+      error: getErrorMessage(err),
+    });
+  }
 };
 
 const remove = async (req, res) => {
   try {
-    let user = req.profile
-    let deletedUser = await user.remove()
-    deletedUser.hashed_password = undefined
-    deletedUser.salt = undefined
-    res.json(deletedUser)
-    } catch (err) {
-    return res.status(400).json({
-    error: getErrorMessage(err)
-    })
+    let userId = req.params.userId
+
+    let deletedUser = await User.findByIdAndDelete(userId);
+    if (!deletedUser) {
+      return res.status(404).json({
+        error: "User not found",
+      });
     }
+    deletedUser.hashed_password = undefined;
+    deletedUser.salt = undefined;
+    res.json(deletedUser);
+  } catch (err) {
+    return res.status(400).json({
+      error: getErrorMessage(err),
+    });
+  }
 };
 
 module.exports = { create, userByID, read, list, remove, update };

@@ -1,8 +1,9 @@
 const mongoose = require("mongoose"); // Import mongoose module that will be used to connect to MongoDB.
+const crypto = require("crypto");
 
 const UserSchema = new mongoose.Schema({
   // Create a new schema called UserSchema.
-  name: {
+  username: {
     type: String,
     trim: true,
     required: "Name is required",
@@ -71,4 +72,5 @@ UserSchema.path("hashed_password").validate(function (v) {
   }
 }, null);
 
-module.exports = mongoose.model("User", UserSchema); // Export the User model.
+const User = mongoose.model("User", UserSchema); // Export the User model.
+module.exports = User
