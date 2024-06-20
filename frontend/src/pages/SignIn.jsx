@@ -17,7 +17,7 @@ export default function SignIn() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      dispatch(signin(formData));
+      await dispatch(signin(formData)).unwrap();
       if(error)
       {
         // Handle signin rejection if necessary using react toastify
