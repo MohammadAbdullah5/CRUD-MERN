@@ -17,7 +17,7 @@ export default function SignIn() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await dispatch(signin(formData)).unwrap();
+      await dispatch(signin(formData)).unwrap(); // unwrap() is used to get the actual payload value
       if(error)
       {
         // Handle signin rejection if necessary using react toastify
@@ -66,7 +66,7 @@ export default function SignIn() {
           <span className='text-blue-500'>Sign up</span>
         </Link>
       </div>
-      {error && <p className='text-red-700 mt-5'>{error}</p>}
+      {error && <p className='text-red-700 mt-5'>{"Email or Password is incorrect"}</p>}
     </div>
   );
 }
